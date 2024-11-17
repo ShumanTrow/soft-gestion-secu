@@ -8,20 +8,20 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="974.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="974.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MenuAlumnoController">
    <children>
-      <Button layoutX="41.0" layoutY="133.0" mnemonicParsing="false" text="Agregar Nuevo Alumno">
+      <Button layoutX="41.0" layoutY="133.0" mnemonicParsing="false" onAction="#abrirAgregarAlumno" text="Agregar Nuevo Alumno">
          <font>
             <Font name="Lucida Console" size="13.0" />
          </font></Button>
-      <TableView layoutX="14.0" layoutY="178.0" prefHeight="492.0" prefWidth="946.0">
+      <TableView fx:id="tablaAlumnos" layoutX="14.0" layoutY="178.0" prefHeight="492.0" prefWidth="946.0">
         <columns>
-          <TableColumn prefWidth="84.0" text="ID de Alumno" />
-          <TableColumn prefWidth="223.0" text="Nombre Completo" />
-            <TableColumn prefWidth="128.0" text="D.N.I." />
-            <TableColumn prefWidth="122.0" text="Teléfono" />
-            <TableColumn prefWidth="122.0" text="Dirección" />
-            <TableColumn prefWidth="138.0" text="Socio" />
+          <TableColumn fx:id="colID" prefWidth="84.0" text="ID de Alumno" />
+          <TableColumn fx:id="colNombre" prefWidth="172.0" text="Nombre Completo" />
+            <TableColumn fx:id="colDni" prefWidth="127.0" text="D.N.I." />
+            <TableColumn fx:id="colTelefono" prefWidth="123.0" text="Teléfono" />
+            <TableColumn fx:id="colDireccion" prefWidth="196.0" text="Dirección" />
+            <TableColumn fx:id="colSocioAsociado" prefWidth="171.0" text="Socio" />
         </columns>
       </TableView>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="SALMON" height="108.0" stroke="BLACK" strokeType="INSIDE" width="974.0" />
@@ -30,15 +30,16 @@
             <Font name="Courier New Bold" size="37.0" />
          </font>
       </Label>
-      <Button layoutX="431.0" layoutY="133.0" mnemonicParsing="false" text="Eliminar Alumno">
+      <Button fx:id="btnEliminarAlumno" layoutX="431.0" layoutY="133.0" mnemonicParsing="false" onAction="#eliminarAlumno" text="Eliminar Alumno">
          <font>
             <Font name="Lucida Console" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="257.0" layoutY="133.0" mnemonicParsing="false" text="Modificar Alumno">
+      <Button layoutX="257.0" layoutY="133.0" mnemonicParsing="false" onAction="#abrirModificarAlumno" text="Modificar Alumno">
          <font>
             <Font name="Lucida Console" size="13.0" />
          </font>
       </Button>
+      <Button fx:id="btnVolverMenuPrincipal" layoutX="869.0" layoutY="42.0" mnemonicParsing="false" onAction="#volverMenuPrincipal" text="Volver" />
    </children>
 </AnchorPane>

@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="307.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AgregarAlumnoController">
    <children>
-      <Button fx:id="btnAgregar" layoutX="55.0" layoutY="485.0" mnemonicParsing="false" onAction="#agregarAlumno" text="Agregar" />
+      <Button fx:id="btnModificar" layoutX="55.0" layoutY="485.0" mnemonicParsing="false" onAction="#modificarAlumno" text="Modificar" />
       <TextField fx:id="nombreCompleto" layoutX="33.0" layoutY="163.0" prefHeight="25.0" prefWidth="240.0" />
       <Label layoutX="33.0" layoutY="146.0" text="Nombre Completo">
          <font>
@@ -36,7 +36,7 @@
       </Label>
       <Button layoutX="185.0" layoutY="485.0" mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="SALMON" height="101.0" layoutX="-4.0" stroke="BLACK" strokeType="INSIDE" width="313.0" />
-      <Label layoutX="26.0" layoutY="37.0" text="Agregar Nuevo Alumno">
+      <Label layoutX="59.0" layoutY="37.0" text="Modificar Alumno">
          <font>
             <Font name="Courier New Bold" size="21.0" />
          </font>

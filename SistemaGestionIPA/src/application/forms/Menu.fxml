@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="628.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MenuController">
    <children>
-      <Button fx:id="btnAlumnos" layoutX="227.0" layoutY="301.0" mnemonicParsing="false" style="-fx-background-color: salmon; -fx-border-color: black;" text="Alumnos" textAlignment="CENTER">
+      <Button fx:id="btnAlumnos" layoutX="227.0" layoutY="301.0" mnemonicParsing="false" onAction="#abrirAlumnosMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Alumnos" textAlignment="CENTER">
          <font>
             <Font name="Courier New Bold" size="31.0" />
          </font>
@@ -19,7 +19,7 @@
             <Font name="Courier New Bold" size="31.0" />
          </font>
       </Button>
-      <Button fx:id="btnCuotas" layoutX="236.0" layoutY="220.0" mnemonicParsing="false" style="-fx-background-color: salmon; -fx-border-color: black;" text="Cuotas" textAlignment="CENTER">
+      <Button fx:id="btnCuotas" layoutX="236.0" layoutY="220.0" mnemonicParsing="false" onAction="#abrirCuotasMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Cuotas" textAlignment="CENTER">
          <font>
             <Font name="Courier New Bold" size="31.0" />
          </font>

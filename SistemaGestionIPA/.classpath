@@ -8,5 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/MySQL"/>
+	<classpathentry kind="lib" path="F:/Softs/JAVA´s/mysql-connector-j-9.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

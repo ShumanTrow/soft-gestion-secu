@@ -15,66 +15,81 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
-	//Clase controladora que gestiona todo el Menu de Socios.
 public class MenuSociosController {
 
     @FXML
     private TableView<Socio> tablaSocios;
-
     @FXML
     private TableColumn<Socio, String> colNombre;
-
+    @FXML
+    private TableColumn<Socio, String> colIdSocio;
     @FXML
     private TableColumn<Socio, String> colDni;
-
     @FXML
     private TableColumn<Socio, String> colTelefono;
-
     @FXML
     private TableColumn<Socio, String> colDireccion;
-
     @FXML
     private TableColumn<Socio, String> colEmail;
-
     @FXML
     private Button btnEliminarSocio;
-
+    @FXML
+    private Button btnVolverMenuPrincipal;
+    
     private ObservableList<Socio> listaSocios = FXCollections.observableArrayList();
 
-    // Método que vincula las columnas con propiedades de la clase Socio.
     @FXML
     private void initialize() {
+    	colIdSocio.setCellValueFactory(new PropertyValueFactory<>("id_Socio"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombreCompleto"));
         colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
         colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         colDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         tablaSocios.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        
-        // Agrego algunos socios de ejemplo para que se vean en la tabla.
-        Socio socio1 = new Socio("Juan Perez", "12345678", "123456789", "Calle 1", "juanperez@mail.com");
-        Socio socio2 = new Socio("Maria Lopez", "87654321", "987654321", "Calle 2", "marialopez@mail.com");
-        Socio socio3 = new Socio("Carlos Gómez", "45678912", "654987321", "Calle 3", "carlosgomez@mail.com");
 
-        listaSocios.addAll(socio1, socio2, socio3);
-        
-        // Configura la tabla con los datos iniciales
-        tablaSocios.setItems(listaSocios);
+        // Cargar los socios desde la base de datos
+        cargarSociosDesdeBD();
     }
+
+    public void cargarSociosDesdeBD() {
+        listaSocios.clear();
+        String sql = "SELECT id_Socio, nombreCompleto, dni, telefono, direccion, email FROM Socios"; // Incluye idSocio
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Socio socio = new Socio(
+                    rs.getInt("id_Socio"),  // Obtener el ID del socio
+                    rs.getString("nombreCompleto"),
+                    rs.getString("dni"),
+                    rs.getString("telefono"),
+                    rs.getString("direccion"),
+                    rs.getString("email")
+                );
+                listaSocios.add(socio);
+            }
+            tablaSocios.setItems(listaSocios);
+        } catch (SQLException e) {
+            System.out.println("Error al cargar socios: " + e.getMessage());
+        }
+    }
+
 
     @FXML
     private void abrirAgregarSocio() throws IOException {
-        // Carga el formulario de AgregarSocio.
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/forms/SociosNuevo.fxml"));
         Parent root = loader.load();
 
-        // Obtiene el controlador de AgregarSocio para pasar el controlador de MenuSocios.
         AgregarSocioController agregarController = loader.getController();
         agregarController.setMenuSociosController(this);
 
-        // Muestra la ventana de Agregar Socio Nuevo.
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
@@ -82,19 +97,15 @@ public class MenuSociosController {
 
     @FXML
     private void abrirModificarSocio() throws IOException {
-        // Verifica si hay un socio seleccionado.
         Socio socioSeleccionado = tablaSocios.getSelectionModel().getSelectedItem();
         if (socioSeleccionado != null) {
-            // Carga el formulario de ModificarSocio.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/forms/SociosModificar.fxml"));
             Parent root = loader.load();
-            	
-            // Obtiene el controlador de ModificarSocio para pasar los datos del socio seleccionado.
+
             ModificarSocioController modificarController = loader.getController();
             modificarController.setSocio(socioSeleccionado);
             modificarController.setMenuSociosController(this);
 
-            // Se muestra la ventana de Modificar Socio
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
@@ -102,46 +113,98 @@ public class MenuSociosController {
             System.out.println("Por favor, selecciona un socio de la tabla.");
         }
     }
-    
+
     @FXML
     private void eliminarSocio() {
-        // Obtiene el socio seleccionado en la tabla.
         Socio socioSeleccionado = tablaSocios.getSelectionModel().getSelectedItem();
-
         if (socioSeleccionado != null) {
-            // Crea el cuadro de diálogo de confirmación.
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmación de eliminación");
             alert.setHeaderText(null);
             alert.setContentText("¿Estás seguro de que deseas eliminar el socio seleccionado?");
             
-            // Muestra el cuadro de diálogo y espera la respuesta del usuario.
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Elimina el socio de la lista y refresca la tabla.
-                listaSocios.remove(socioSeleccionado);
-                tablaSocios.refresh();
+                String sqlSocios = "DELETE FROM Socios WHERE id_Socio = ?";
+                String sqlCuotas = "DELETE FROM Cuotas WHERE socio_id = ?"; // Elimina cuotas asociadas
+                try (Connection conn = ConexionDB.getConnection();
+                     PreparedStatement pstmtSocios = conn.prepareStatement(sqlSocios);
+                     PreparedStatement pstmtCuotas = conn.prepareStatement(sqlCuotas)) {
+                    // Eliminar cuotas primero
+                    pstmtCuotas.setInt(1, socioSeleccionado.getId_Socio());
+                    pstmtCuotas.executeUpdate();
+                    // Eliminar socio
+                    pstmtSocios.setInt(1, socioSeleccionado.getId_Socio());
+                    pstmtSocios.executeUpdate();
+                    cargarSociosDesdeBD(); // Refresca la tabla después de la eliminación
+                } catch (SQLException e) {
+                    System.out.println("Error al eliminar socio: " + e.getMessage());
+                }
             }
         } else {
             System.out.println("Por favor, selecciona un socio de la tabla para eliminar.");
         }
     }
 
-    //Mini método para refrescar la tabla.
-    public void refrescarTabla() {
-        tablaSocios.refresh();
-    }
-  
-    // Agrega el nuevo socio al array, proximamente será a la BD por medio de un Insert.
-    public void agregarSocio(Socio nuevoSocio) {
-        listaSocios.add(nuevoSocio);
 
-        // Refresca la tabla para mostrar el nuevo socio.
-        tablaSocios.refresh();
+
+
+    public void refrescarTabla() {
+        cargarSociosDesdeBD();
+    }
+
+    public void agregarSocio(Socio nuevoSocio) {
+        String sql = "INSERT INTO Socios (nombreCompleto, dni, telefono, direccion, email) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nuevoSocio.getNombreCompleto());
+            pstmt.setString(2, nuevoSocio.getDni());
+            pstmt.setString(3, nuevoSocio.getTelefono());
+            pstmt.setString(4, nuevoSocio.getDireccion());
+            pstmt.setString(5, nuevoSocio.getEmail());
+            pstmt.executeUpdate();
+            cargarSociosDesdeBD();
+        } catch (SQLException e) {
+            System.out.println("Error al agregar socio: " + e.getMessage());
+        }
     }
 
     public void actualizarSocio(Socio socioModificado) {
-        // Refresca la tabla para reflejar los cambios.
-        tablaSocios.refresh();
+        String sql = "UPDATE Socios SET nombreCompleto = ?, telefono = ?, direccion = ?, email = ? WHERE dni = ?";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, socioModificado.getNombreCompleto());
+            pstmt.setString(2, socioModificado.getTelefono());
+            pstmt.setString(3, socioModificado.getDireccion());
+            pstmt.setString(4, socioModificado.getEmail());
+            pstmt.setString(5, socioModificado.getDni());
+            pstmt.executeUpdate();
+            cargarSociosDesdeBD();
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar socio: " + e.getMessage());
+        }
     }
+   
+
+    public void volverMenuPrincipal() {
+        try {
+            // Cargar el FXML del Menu Principal
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/forms/Menu.fxml"));
+            Parent root = loader.load();
+
+            // Obtener la ventana actual (la ventana de Socios, Alumnos o Cuotas)
+            Stage stage = (Stage) btnVolverMenuPrincipal.getScene().getWindow();
+
+            // Establecer la nueva escena (Menu Principal)
+            stage.setScene(new Scene(root));
+
+            // Mostrar la ventana con el menú principal
+            stage.show();
+        } catch (IOException e) {
+            System.out.println("Error al cargar el menú principal: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    
 }

@@ -3,73 +3,74 @@ package application;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-	//Clase controladora que se encarga de el apartado Modificar Socio.
 public class ModificarSocioController {
 
     @FXML
     private TextField txtNombreCompleto;
-
     @FXML
     private TextField txtDni;
-
     @FXML
     private TextField txtTelefono;
-
     @FXML
     private TextField txtDireccion;
-
     @FXML
     private TextField txtEmail;
 
-    private Socio socioSeleccionado; // Para almacenar el socio a modificar.
-    private MenuSociosController menuSociosController; // Para poder refrescar la tabla en MenuSocios.
+    private Socio socioSeleccionado;
+    private MenuSociosController menuSociosController;
 
-    // Este método será llamado desde el controlador de MenuSocios
     public void setSocio(Socio socio) {
         this.socioSeleccionado = socio;
-
-        // Se comprueba que todos los campos de texto estén inicializados antes de usarlos.
-        if (txtNombreCompleto != null && txtDni != null && txtTelefono != null && txtDireccion != null && txtEmail != null) {
-            // Muestra los datos del socio seleccionado en los campos de texto.
-            txtNombreCompleto.setText(socio.getNombreCompleto());
-            txtDni.setText(socio.getDni());
-            txtTelefono.setText(socio.getTelefono());
-            txtDireccion.setText(socio.getDireccion());
-            txtEmail.setText(socio.getEmail());
-        } else {
-            System.out.println("Error: Los campos de texto no están inicializados correctamente.");
-        }
+        txtNombreCompleto.setText(socio.getNombreCompleto());
+        txtDni.setText(socio.getDni());
+        txtTelefono.setText(socio.getTelefono());
+        txtDireccion.setText(socio.getDireccion());
+        txtEmail.setText(socio.getEmail());
     }
 
-    // Este método será llamado desde el controlador de MenuSocios para poder actualizar la tabla
     public void setMenuSociosController(MenuSociosController controller) {
         this.menuSociosController = controller;
     }
 
-    // Actualizar los datos del socio con los valores modificados en los campos de texto.
     @FXML
     private void guardarCambios() {
         if (socioSeleccionado != null) {
+            // Actualizamos los datos del socio con los valores del formulario
             socioSeleccionado.setNombreCompleto(txtNombreCompleto.getText());
-            socioSeleccionado.setDni(txtDni.getText());
+            socioSeleccionado.setDni(txtDni.getText());  // Este sí puede cambiar si lo desea el admin
             socioSeleccionado.setTelefono(txtTelefono.getText());
             socioSeleccionado.setDireccion(txtDireccion.getText());
             socioSeleccionado.setEmail(txtEmail.getText());
 
-            // Refresca la tabla en MenuSociosController.
-            if (menuSociosController != null) {
-                menuSociosController.refrescarTabla();
-            } else {
-                System.out.println("Error: menuSociosController no está inicializado.");
+            // Usamos id_Socio como el identificador para la actualización
+            String sql = "UPDATE Socios SET nombreCompleto = ?, telefono = ?, direccion = ?, email = ?, dni = ? WHERE id_Socio = ?";
+            try (Connection conn = ConexionDB.getConnection();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, socioSeleccionado.getNombreCompleto());
+                pstmt.setString(2, socioSeleccionado.getTelefono());
+                pstmt.setString(3, socioSeleccionado.getDireccion());
+                pstmt.setString(4, socioSeleccionado.getEmail());
+                pstmt.setString(5, socioSeleccionado.getDni());  // Permitimos que el DNI sea actualizado
+                pstmt.setInt(6, socioSeleccionado.getId_Socio());  // Usamos el id_Socio para la actualización
+                pstmt.executeUpdate();
+
+                // Recargamos los socios en la tabla después de la actualización
+                menuSociosController.cargarSociosDesdeBD();
+            } catch (SQLException e) {
+                System.out.println("Error al actualizar socio: " + e.getMessage());
             }
 
-            // Cierra la ventana de ModificarSocio.
+            // Cerramos la ventana después de guardar los cambios
             Stage stage = (Stage) txtNombreCompleto.getScene().getWindow();
             stage.close();
         }
     }
-    // Cierra la ventana sin realizar cambios.
+
+
     @FXML
     private void cerrarFormulario() {
         Stage stage = (Stage) txtNombreCompleto.getScene().getWindow();

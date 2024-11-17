@@ -16,7 +16,7 @@
          </font></Button>
       <TableView fx:id="tablaSocios" layoutX="14.0" layoutY="178.0" prefHeight="492.0" prefWidth="946.0">
         <columns>
-          <TableColumn prefWidth="70.0" text="ID de Socio" />
+          <TableColumn fx:id="colIdSocio" prefWidth="70.0" text="ID de Socio" />
           <TableColumn fx:id="colNombre" prefWidth="237.0" text="Nombre Completo" />
             <TableColumn fx:id="colDni" prefWidth="128.0" text="D.N.I." />
             <TableColumn fx:id="colTelefono" prefWidth="122.0" text="Teléfono" />
@@ -40,5 +40,6 @@
             <Font name="Lucida Console" size="13.0" />
          </font>
       </Button>
+      <Button fx:id="btnVolverMenuPrincipal" layoutX="871.0" layoutY="42.0" mnemonicParsing="false" onAction="#volverMenuPrincipal" text="Volver" />
    </children>
 </AnchorPane>
