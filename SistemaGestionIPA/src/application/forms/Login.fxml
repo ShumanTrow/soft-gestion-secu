@@ -9,7 +9,10 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="321.0" prefWidth="430.0" style="-fx-background-color: lightcoral; -fx-border-color: black;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.LoginController">
    <children>
-      <TextField fx:id="txtDNI" layoutX="58.0" layoutY="153.0" prefHeight="25.0" prefWidth="314.0" />
+      <TextField fx:id="txtDNI" layoutX="58.0" layoutY="153.0" prefHeight="25.0" prefWidth="314.0">
+         <font>
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></TextField>
       <Label layoutX="58.0" layoutY="29.0" text="Sistema de Gestión">
          <font>
             <Font name="Courier New Bold" size="29.0" />
@@ -22,12 +25,12 @@
       </Label>
       <Label layoutX="58.0" layoutY="131.0" text="Documento de Identidad:">
          <font>
-            <Font name="Lucida Console" size="14.0" />
+            <Font name="Segoe UI" size="14.0" />
          </font>
       </Label>
       <Label layoutX="58.0" layoutY="197.0" text="Contraseña:">
          <font>
-            <Font name="Lucida Console" size="14.0" />
+            <Font name="Segoe UI" size="14.0" />
          </font>
       </Label>
       <Button fx:id="btnIniciarSesion" layoutX="126.0" layoutY="262.0" mnemonicParsing="false" onAction="#iniciarSesion" style="-fx-background-color: salmon; -fx-border-color: black;" text="Iniciar Sesión">
@@ -35,6 +38,9 @@
             <Font name="Courier New Bold" size="18.0" />
          </font>
       </Button>
-      <PasswordField fx:id="txtPassword" layoutX="58.0" layoutY="220.0" prefHeight="25.0" prefWidth="314.0" />
+      <PasswordField fx:id="txtPassword" layoutX="58.0" layoutY="220.0" prefHeight="25.0" prefWidth="314.0">
+         <font>
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></PasswordField>
    </children>
 </AnchorPane>

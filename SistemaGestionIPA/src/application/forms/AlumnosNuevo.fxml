@@ -9,39 +9,63 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="307.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AgregarAlumnoController">
    <children>
-      <Button fx:id="btnAgregar" layoutX="55.0" layoutY="485.0" mnemonicParsing="false" onAction="#agregarAlumno" text="Agregar" />
-      <TextField fx:id="nombreCompleto" layoutX="33.0" layoutY="163.0" prefHeight="25.0" prefWidth="240.0" />
-      <Label layoutX="33.0" layoutY="146.0" text="Nombre Completo">
+      <Button fx:id="btnAgregar" layoutX="55.0" layoutY="485.0" mnemonicParsing="false" onAction="#agregarAlumno" text="Agregar">
          <font>
-            <Font name="Lucida Console" size="14.0" />
+            <Font size="15.0" />
+         </font></Button>
+      <TextField fx:id="nombreCompleto" layoutX="33.0" layoutY="163.0" prefHeight="25.0" prefWidth="240.0">
+         <font>
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></TextField>
+      <Label layoutX="33.0" layoutY="140.0" text="Nombre Completo:">
+         <font>
+            <Font name="Segoe UI" size="15.0" />
          </font>
       </Label>
-      <TextField fx:id="dni" layoutX="33.0" layoutY="222.0" prefHeight="25.0" prefWidth="240.0" />
-      <Label layoutX="33.0" layoutY="205.0" text="D.N.I.">
+      <TextField fx:id="dni" layoutX="33.0" layoutY="222.0" prefHeight="25.0" prefWidth="240.0">
          <font>
-            <Font name="Lucida Console" size="14.0" />
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></TextField>
+      <Label layoutX="33.0" layoutY="200.0" text="D.N.I.:">
+         <font>
+            <Font name="Segoe UI" size="15.0" />
          </font>
       </Label>
-      <TextField fx:id="telefono" layoutX="33.0" layoutY="286.0" prefHeight="25.0" prefWidth="240.0" />
-      <Label layoutX="33.0" layoutY="269.0" text="Teléfono">
+      <TextField fx:id="telefono" layoutX="33.0" layoutY="286.0" prefHeight="25.0" prefWidth="240.0">
          <font>
-            <Font name="Lucida Console" size="14.0" />
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></TextField>
+      <Label layoutX="33.0" layoutY="264.0" text="Teléfono:">
+         <font>
+            <Font name="Segoe UI" size="15.0" />
          </font>
       </Label>
-      <TextField fx:id="direccion" layoutX="33.0" layoutY="348.0" prefHeight="25.0" prefWidth="240.0" />
-      <Label layoutX="33.0" layoutY="331.0" text="Dirección">
+      <TextField fx:id="direccion" layoutX="33.0" layoutY="348.0" prefHeight="25.0" prefWidth="240.0">
          <font>
-            <Font name="Lucida Console" size="14.0" />
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></TextField>
+      <Label layoutX="33.0" layoutY="326.0" text="Dirección:">
+         <font>
+            <Font name="Segoe UI" size="15.0" />
          </font>
       </Label>
-      <Button layoutX="185.0" layoutY="485.0" mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar" />
+      <Button layoutX="185.0" layoutY="485.0" mnemonicParsing="false" onAction="#cerrarVentana" text="Cancelar">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="SALMON" height="101.0" layoutX="-4.0" stroke="BLACK" strokeType="INSIDE" width="313.0" />
-      <Label layoutX="26.0" layoutY="37.0" text="Agregar Nuevo Alumno">
+      <Label layoutX="16.0" layoutY="43.0" text="Agregar Nuevo Alumno" textAlignment="CENTER" wrapText="true">
          <font>
-            <Font name="Courier New Bold" size="21.0" />
+            <Font name="Courier New Bold" size="23.0" />
          </font>
       </Label>
-      <Button fx:id="btnAgregarSocio" layoutX="108.0" layoutY="392.0" mnemonicParsing="false" onAction="#abrirSeleccionarSocio" text="Agregar Socio" />
-      <TextField fx:id="txtSocioSeleccionado" layoutX="33.0" layoutY="429.0" prefHeight="25.0" prefWidth="240.0" />
+      <Button fx:id="btnAgregarSocio" layoutX="97.0" layoutY="389.0" mnemonicParsing="false" onAction="#abrirSeleccionarSocio" text="Agregar Socio">
+         <font>
+            <Font size="15.0" />
+         </font></Button>
+      <TextField fx:id="txtSocioSeleccionado" layoutX="33.0" layoutY="431.0" prefHeight="25.0" prefWidth="240.0">
+         <font>
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></TextField>
    </children>
 </AnchorPane>

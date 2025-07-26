@@ -11,18 +11,19 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="1089.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.VerCuotasController">
    <children>
-      <TableView fx:id="tableCuotas" layoutX="14.0" layoutY="178.0" prefHeight="492.0" prefWidth="1061.0">
-        <columns>
-          <TableColumn fx:id="colIdCuota" prefWidth="84.0" text="ID de Cuota" />
-          <TableColumn fx:id="colFechaCreacion" prefWidth="160.0" text="Fecha de Creación" />
-            <TableColumn fx:id="colFechaVencimiento" prefWidth="133.0" text="Fecha de Vencimiento" />
-            <TableColumn fx:id="colSocioAPagar" prefWidth="142.0" text="Socio a Pagar" />
-            <TableColumn fx:id="colAlumnoAsociado" prefWidth="142.0" text="Alumno Asociado" />
-            <TableColumn fx:id="colEstado" prefWidth="136.0" text="Estado" />
-            <TableColumn fx:id="colMonto" prefWidth="148.0" text="Monto" />
-            <TableColumn fx:id="colPagado" prefWidth="115.0" text="Pagado" />
-        </columns>
-      </TableView>
+      <TableView fx:id="tableCuotas" layoutX="22.0" layoutY="173.0" prefHeight="492.0" prefWidth="1061.0" style="-fx-font-size: 14px; -fx-font-family: 'Segoe UI';">
+  			<columns>
+			    <TableColumn fx:id="colIdCuota" prefWidth="84.0" style="-fx-alignment: CENTER;" text="ID de Cuota" />
+			    <TableColumn fx:id="colFechaCreacion" prefWidth="160.0" style="-fx-alignment: CENTER;" text="Fecha de Creación" />
+			    <TableColumn fx:id="colFechaVencimiento" prefWidth="133.0" style="-fx-alignment: CENTER;" text="Fecha de Vencimiento" />
+			    <TableColumn fx:id="colSocioAPagar" prefWidth="142.0" style="-fx-alignment: CENTER;" text="Socio a Pagar" />
+			    <TableColumn fx:id="colAlumnoAsociado" prefWidth="142.0" style="-fx-alignment: CENTER;" text="Alumno Asociado" />
+			    <TableColumn fx:id="colEstado" prefWidth="136.0" style="-fx-alignment: CENTER;" text="Estado" />
+			    <TableColumn fx:id="colMonto" prefWidth="148.0" style="-fx-alignment: CENTER;" text="Monto" />
+			    <TableColumn fx:id="colPagado" prefWidth="115.0" style="-fx-alignment: CENTER;" text="Pagado" />
+  			</columns>
+		</TableView>
+
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="SALMON" height="108.0" stroke="BLACK" strokeType="INSIDE" width="1089.0" />
       <Label layoutX="14.0" layoutY="32.0" text="Menú de Cuotas">
          <font>
@@ -41,6 +42,20 @@
       </Button>
       <Button fx:id="btnVolverMenuPrincipal" layoutX="984.0" layoutY="42.0" mnemonicParsing="false" onAction="#volverMenuPrincipal" text="Volver" />
       <TextField fx:id="txtBuscarSocio" layoutX="54.0" layoutY="139.0" prefHeight="25.0" prefWidth="215.0" />
-      <Label layoutX="54.0" layoutY="121.0" text="Filtrar por Socio:" />
+      <Label layoutX="54.0" layoutY="121.0" text="Filtrar por Socio:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <TextField fx:id="txtBuscarAlumno" layoutX="305.0" layoutY="139.0" prefHeight="25.0" prefWidth="215.0" />
+      <Label layoutX="305.0" layoutY="121.0" text="Filtrar por Alumno:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelPrecioActual" layoutX="545.0" layoutY="133.0" prefHeight="19.0" prefWidth="203.0" text="Precio Actual: $">
+         <font>
+            <Font name="Segoe UI Bold" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

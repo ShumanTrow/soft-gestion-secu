@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import java.sql.ResultSet;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,15 +51,20 @@ public class CambiarPrecioController {
     }
 
     private void actualizarPrecioConfiguracionCuotas(double nuevoPrecio) {
-        String sql = "UPDATE ConfiguracionCuotas SET monto = ?, fecha_actualizacion = ? WHERE id_config = 1"; // Asumiendo que solo hay un registro de configuración
+        String sql = "UPDATE ConfiguracionCuotas SET monto = ?, fecha_actualizacion = ? WHERE id_config = 1";
+
         try (Connection conn = ConexionDB.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setDouble(1, nuevoPrecio);
             pstmt.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
             pstmt.executeUpdate();
-            System.out.println("Precio actualizado correctamente en ConfiguracionCuotas.");
+
+            System.out.println("Precio actualizado correctamente.");
         } catch (SQLException e) {
             System.out.println("Error al actualizar el precio en ConfiguracionCuotas: " + e.getMessage());
         }
     }
+
+
 }

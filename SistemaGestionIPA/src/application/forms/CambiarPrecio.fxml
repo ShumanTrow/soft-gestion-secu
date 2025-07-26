@@ -8,15 +8,18 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="246.0" prefWidth="430.0" style="-fx-background-color: lightcoral; -fx-border-color: black;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CambiarPrecioController">
    <children>
-      <TextField fx:id="txtNuevoPrecio" layoutX="59.0" layoutY="122.0" prefHeight="25.0" prefWidth="314.0" />
-      <Label layoutX="58.0" layoutY="41.0" text="Cambiar Precio de Cuotas">
+      <TextField fx:id="txtNuevoPrecio" layoutX="59.0" layoutY="122.0" prefHeight="25.0" prefWidth="314.0">
          <font>
-            <Font name="Courier New" size="22.0" />
+            <Font name="Segoe UI" size="12.0" />
+         </font></TextField>
+      <Label layoutX="21.0" layoutY="41.0" text="Cambiar Precio de Cuotas">
+         <font>
+            <Font name="Courier New Bold" size="27.0" />
          </font>
       </Label>
       <Label layoutX="59.0" layoutY="100.0" text="Ingrese el Nuevo Precio:">
          <font>
-            <Font name="Lucida Console" size="14.0" />
+            <Font name="Segoe UI" size="14.0" />
          </font>
       </Label>
       <Button fx:id="btnAsignarPrecio" layoutX="95.0" layoutY="167.0" mnemonicParsing="false" onAction="#asignarNuevoPrecio" style="-fx-background-color: salmon; -fx-border-color: black;" text="Asignar nuevo Precio">

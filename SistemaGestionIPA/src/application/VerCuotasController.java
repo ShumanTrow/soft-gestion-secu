@@ -41,14 +41,22 @@ public class VerCuotasController {
     @FXML
     private Button btnActualizarCuotas;
     @FXML
-    private Button btnCambiarPrecio; // Nuevo botón
+    private Button btnCambiarPrecio;
     @FXML
     private TextField txtBuscarSocio;
+    @FXML
+    private TextField txtBuscarAlumno;
+    @FXML
+    private Label labelPrecioActual;
+
 
     private ObservableList<Cuota> listaCuotas = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
+        double precioActual = obtenerPrecioActual(); // ✅
+        labelPrecioActual.setText("Precio actual: $" + String.format("%.2f", precioActual)); // ✅
+
         colIdCuota.setCellValueFactory(new PropertyValueFactory<>("idCuota"));
         colFechaCreacion.setCellValueFactory(new PropertyValueFactory<>("fechaCreacion"));
         colFechaVencimiento.setCellValueFactory(new PropertyValueFactory<>("fechaVencimiento"));
@@ -62,20 +70,38 @@ public class VerCuotasController {
         colPagado.setEditable(true);
         tableCuotas.setEditable(true);
 
+        aplicarInteresACuotasVencidas();
         aplicarFormatoFecha();
         convertirEstadoAMayuscula();
         cargarCuotasDesdeBD();
         agregarListenerCambioPago();
 
         btnActualizarCuotas.setOnAction(event -> refrescarTabla());
-
-        // Acción del nuevo botón para abrir la mini interfaz
         btnCambiarPrecio.setOnAction(event -> mostrarCambioPrecio());
 
-        // Agregar listener al campo de búsqueda
         txtBuscarSocio.textProperty().addListener((observable, oldValue, newValue) -> {
             filtrarCuotas(newValue);
         });
+        txtBuscarAlumno.textProperty().addListener((obs, oldValue, newValue) -> {
+            filtrarCuotasPorAlumno(newValue);
+        });
+
+    }
+
+
+    private void aplicarInteresACuotasVencidas() {
+        String sql = "UPDATE Cuotas " +
+                     "SET estado = 'vencida', monto = monto * 1.10 " +
+                     "WHERE estado = 'pendiente' AND fechaVencimiento < CURDATE()";
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            int filasActualizadas = pstmt.executeUpdate();
+            if (filasActualizadas > 0) {
+                System.out.println("Interés aplicado a " + filasActualizadas + " cuotas vencidas.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al aplicar interés a cuotas vencidas: " + e.getMessage());
+        }
     }
 
     private void cargarCuotasDesdeBD() {
@@ -86,13 +112,12 @@ public class VerCuotasController {
 
             listaCuotas.clear();
             while (rs.next()) {
-                String estado = rs.getString("estado");
                 Cuota cuota = new Cuota(
                         rs.getInt("id_cuota"),
                         rs.getDate("fechaCreacion").toLocalDate(),
                         rs.getDate("fechaVencimiento").toLocalDate(),
                         rs.getString("socio_nombre"),
-                        estado,
+                        rs.getString("estado"),
                         rs.getDouble("monto"),
                         rs.getString("alumno_nombre")
                 );
@@ -112,7 +137,6 @@ public class VerCuotasController {
     private void aplicarFormatoFecha() {
         colFechaCreacion.setCellFactory(col -> new TableCell<>() {
             private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
             @Override
             protected void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -122,7 +146,6 @@ public class VerCuotasController {
 
         colFechaVencimiento.setCellFactory(col -> new TableCell<>() {
             private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
             @Override
             protected void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
@@ -142,7 +165,7 @@ public class VerCuotasController {
     }
 
     private void agregarListenerCambioPago() {
-        tableCuotas.getItems().forEach(cuota -> 
+        tableCuotas.getItems().forEach(cuota ->
             cuota.pagadoProperty().addListener((observable, oldValue, newValue) -> {
                 cuota.setEstado(newValue ? "pagada" : "pendiente");
                 actualizarEstadoPago(cuota);
@@ -164,9 +187,10 @@ public class VerCuotasController {
 
     private void filtrarCuotas(String filtro) {
         if (filtro == null || filtro.isEmpty()) {
-            tableCuotas.setItems(listaCuotas); 
+            tableCuotas.setItems(listaCuotas);
         } else {
             ObservableList<Cuota> cuotasFiltradas = FXCollections.observableArrayList();
+            
             for (Cuota cuota : listaCuotas) {
                 if (cuota.getSocioAPagar().toLowerCase().contains(filtro.toLowerCase())) {
                     cuotasFiltradas.add(cuota);
@@ -175,14 +199,30 @@ public class VerCuotasController {
             tableCuotas.setItems(cuotasFiltradas);
         }
     }
+    
+    private void filtrarCuotasPorAlumno(String filtro) {
+        if (filtro == null || filtro.isEmpty()) {
+            tableCuotas.setItems(listaCuotas);
+            return;
+        }
+
+        ObservableList<Cuota> cuotasFiltradas = FXCollections.observableArrayList();
+
+        for (Cuota cuota : listaCuotas) {
+            if (cuota.getAlumnoAsociado() != null && cuota.getAlumnoAsociado().toLowerCase().contains(filtro.toLowerCase())) {
+                cuotasFiltradas.add(cuota);
+            }
+        }
+
+        tableCuotas.setItems(cuotasFiltradas);
+    }
+
 
     @FXML
     private void mostrarCambioPrecio() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/forms/CambiarPrecio.fxml"));
             Parent root = loader.load();
-
-            // Crear una nueva ventana para cambiar el precio
             Stage stage = new Stage();
             stage.setTitle("Cambiar Precio de Cuotas Pendientes");
             stage.setScene(new Scene(root));
@@ -205,4 +245,23 @@ public class VerCuotasController {
             e.printStackTrace();
         }
     }
+    
+    private double obtenerPrecioActual() {
+        double precio = 0.0;
+        String sql = "SELECT monto FROM ConfiguracionCuotas WHERE id_config = 1";
+
+        try (Connection conn = ConexionDB.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                precio = rs.getDouble("monto");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el precio actual de la cuota: " + e.getMessage());
+        }
+
+        return precio;
+    }
+
 }

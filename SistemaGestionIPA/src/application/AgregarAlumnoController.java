@@ -16,27 +16,27 @@ import java.time.YearMonth;
 public class AgregarAlumnoController {
 
     @FXML
-    private TextField nombreCompleto;    // Campo para el nombre completo del alumno
+    private TextField nombreCompleto;
     @FXML
-    private TextField dni;               // Campo para el DNI del alumno
+    private TextField dni;
     @FXML
-    private TextField telefono;          // Campo para el teléfono del alumno
+    private TextField telefono;
     @FXML
-    private TextField direccion;         // Campo para la dirección del alumno
+    private TextField direccion;
     @FXML
-    private Button btnAgregar;           // Botón para agregar el alumno
+    private Button btnAgregar;
     @FXML
-    private Button btnCancelar;          // Botón para cancelar la operación
+    private Button btnCancelar;
     @FXML
-    private Button btnSeleccionarSocio;  // Botón para seleccionar el socio asociado
+    private Button btnSeleccionarSocio;
     @FXML
-    private TextField txtSocioSeleccionado; // Campo de texto para mostrar el nombre del socio seleccionado
+    private TextField txtSocioSeleccionado;
 
-    private MenuAlumnoController menuAlumnoController; // Controlador del menú de alumnos
-    private Socio socioSeleccionado;                  // Socio seleccionado para el alumno
+    private MenuAlumnoController menuAlumnoController;
+    private Socio socioSeleccionado;
 
     public void setMenuAlumnoController(MenuAlumnoController controller) {
-        this.menuAlumnoController = controller; // Establecer el controlador principal
+        this.menuAlumnoController = controller;
     }
 
     @FXML
@@ -46,14 +46,12 @@ public class AgregarAlumnoController {
             return;
         }
 
-        // Obtener el monto actual desde ConfiguracionCuotas
         double montoCuota = obtenerMontoCuota();
         if (montoCuota <= 0) {
             System.out.println("Error: No se pudo obtener el monto de las cuotas.");
             return;
         }
 
-        // Creación del nuevo objeto Alumno
         Alumno nuevoAlumno = new Alumno(
             nombreCompleto.getText(),
             dni.getText(),
@@ -64,12 +62,15 @@ public class AgregarAlumnoController {
         );
 
         String sqlAlumno = "INSERT INTO Alumnos (nombreCompleto, dni, telefono, direccion, socio_id, socio_nombre) VALUES (?, ?, ?, ?, ?, ?)";
-        String sqlCuotas = "INSERT INTO Cuotas (fechaCreacion, monto, estado, socio_id, socio_nombre, alumno_nombre, fechaVencimiento) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlCuotas = "INSERT INTO Cuotas (fechaCreacion, monto, estado, socio_id, socio_nombre, alumno_id, alumno_nombre, fechaVencimiento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        int anioActual = LocalDate.now().getYear();
+        int mesActual = LocalDate.now().getMonthValue();
 
         try (Connection conn = ConexionDB.getConnection()) {
-            conn.setAutoCommit(false); // Inicia una transacción
+            conn.setAutoCommit(false);
 
-            // Insertar el alumno
+            // Insertar alumno
             try (PreparedStatement pstmtAlumno = conn.prepareStatement(sqlAlumno, Statement.RETURN_GENERATED_KEYS)) {
                 pstmtAlumno.setString(1, nuevoAlumno.getNombreCompleto());
                 pstmtAlumno.setString(2, nuevoAlumno.getDni());
@@ -79,54 +80,41 @@ public class AgregarAlumnoController {
                 pstmtAlumno.setString(6, nuevoAlumno.getSocioNombre());
                 pstmtAlumno.executeUpdate();
 
-                // Obtener el ID generado del alumno
                 try (ResultSet generatedKeys = pstmtAlumno.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int idAlumno = generatedKeys.getInt(1);
 
-                        // Insertar las cuotas (febrero a diciembre)
+                        // Insertar cuotas desde el mes actual hasta diciembre
                         try (PreparedStatement pstmtCuotas = conn.prepareStatement(sqlCuotas)) {
-                            for (int mes = 2; mes <= 12; mes++) {
-                                LocalDate fechaVencimiento = LocalDate.of(2024, mes, 15); // Vencimiento el día 15 del mes actual
-                                LocalDate fechaCreacion;
+                            for (int mes = mesActual; mes <= 12; mes++) {
+                                LocalDate fechaVencimiento = LocalDate.of(anioActual, mes, 15);
+                                LocalDate fechaCreacion = YearMonth.of(anioActual, mes == 1 ? 12 : mes - 1).atDay(25);
 
-                                // Calcular fecha de creación como el 25 del mes anterior
-                                if (mes == 2) {
-                                    fechaCreacion = LocalDate.of(2024, 1, 25); // Enero del mismo año
-                                } else {
-                                    YearMonth mesAnterior = YearMonth.of(2024, mes - 1);
-                                    fechaCreacion = mesAnterior.atDay(25);
-                                }
-
-                                pstmtCuotas.setDate(1, Date.valueOf(fechaCreacion));         // Fecha de creación
-                                pstmtCuotas.setDouble(2, montoCuota);                       // Monto
-                                pstmtCuotas.setString(3, "pendiente");                     // Estado
-                                pstmtCuotas.setInt(4, nuevoAlumno.getSocioId());           // Socio ID
-                                pstmtCuotas.setString(5, nuevoAlumno.getSocioNombre());    // Socio nombre
-                                pstmtCuotas.setString(6, nuevoAlumno.getNombreCompleto()); // Alumno nombre
-                                pstmtCuotas.setDate(7, Date.valueOf(fechaVencimiento));    // Fecha de vencimiento
-                                pstmtCuotas.addBatch();                                    // Añadir al batch
+                                pstmtCuotas.setDate(1, Date.valueOf(fechaCreacion));
+                                pstmtCuotas.setDouble(2, montoCuota);
+                                pstmtCuotas.setString(3, "pendiente");
+                                pstmtCuotas.setInt(4, nuevoAlumno.getSocioId());
+                                pstmtCuotas.setString(5, nuevoAlumno.getSocioNombre());
+                                pstmtCuotas.setInt(6, idAlumno);  // ← Clave foránea correcta
+                                pstmtCuotas.setString(7, nuevoAlumno.getNombreCompleto());
+                                pstmtCuotas.setDate(8, Date.valueOf(fechaVencimiento));
+                                pstmtCuotas.addBatch();
                             }
-                            pstmtCuotas.executeBatch(); // Ejecutar batch
+                            pstmtCuotas.executeBatch();
                         }
                     }
                 }
             }
 
-            conn.commit(); // Confirmar la transacción
+            conn.commit();
         } catch (SQLException e) {
             System.out.println("Error al agregar el alumno y generar las cuotas: " + e.getMessage());
         }
 
-        // Actualizar la tabla en el controlador principal
         menuAlumnoController.cargarAlumnosDesdeBD();
         cerrarVentana();
     }
 
-    /**
-     * Método para obtener el monto actual de las cuotas desde ConfiguracionCuotas.
-     * @return Monto de la cuota, o -1 si ocurre un error.
-     */
     private double obtenerMontoCuota() {
         String sql = "SELECT monto FROM ConfiguracionCuotas ORDER BY fecha_actualizacion DESC LIMIT 1";
         try (Connection conn = ConexionDB.getConnection();
@@ -138,7 +126,7 @@ public class AgregarAlumnoController {
         } catch (SQLException e) {
             System.out.println("Error al obtener el monto de la cuota: " + e.getMessage());
         }
-        return -1; // En caso de error
+        return -1;
     }
 
     @FXML
@@ -170,29 +158,20 @@ public class AgregarAlumnoController {
         txtSocioSeleccionado.setText(socio.getNombreCompleto());
     }
 
-    
     public void eliminarAlumnoYCuotas(int idAlumno) {
-        String sqlEliminarCuotas = "DELETE FROM Cuotas WHERE alumno_nombre = (SELECT nombreCompleto FROM Alumnos WHERE id_alumno = ?)";
         String sqlEliminarAlumno = "DELETE FROM Alumnos WHERE id_alumno = ?";
 
-        try (Connection conn = ConexionDB.getConnection()) {
-            conn.setAutoCommit(false); // Inicia una transacción
+        try (Connection conn = ConexionDB.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sqlEliminarAlumno)) {
 
-            // Eliminar cuotas asociadas
-            try (PreparedStatement pstmtCuotas = conn.prepareStatement(sqlEliminarCuotas)) {
-                pstmtCuotas.setInt(1, idAlumno);
-                pstmtCuotas.executeUpdate();
-            }
+            pstmt.setInt(1, idAlumno);
+            pstmt.executeUpdate();
+            System.out.println("Alumno y cuotas asociadas eliminados correctamente.");
 
-            // Eliminar alumno
-            try (PreparedStatement pstmtAlumno = conn.prepareStatement(sqlEliminarAlumno)) {
-                pstmtAlumno.setInt(1, idAlumno);
-                pstmtAlumno.executeUpdate();
-            }
-
-            conn.commit(); // Confirmar la transacción
         } catch (SQLException e) {
-            System.out.println("Error al eliminar el alumno y sus cuotas: " + e.getMessage());
+            System.out.println("Error al eliminar alumno: " + e.getMessage());
         }
     }
+
+
 }

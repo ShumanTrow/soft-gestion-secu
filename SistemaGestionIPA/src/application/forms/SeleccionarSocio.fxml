@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="364.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SeleccionarSocioController">
    <children>
-      <TableView fx:id="tablaSocios" layoutX="15.0" layoutY="200.0" prefHeight="451.0" prefWidth="334.0">
+      <TableView fx:id="tablaSocios" layoutX="15.0" layoutY="202.0" prefHeight="451.0" prefWidth="334.0">
         <columns>
             <TableColumn fx:id="colIDSocio" prefWidth="43.0" text="ID" />
           <TableColumn fx:id="colNombreCompleto" prefWidth="290.0" text="Nombre Completo" />
@@ -23,12 +23,15 @@
             <Font name="Courier New Bold" size="37.0" />
          </font>
       </Label>
-      <Button fx:id="btnSeleccionar" layoutX="130.0" layoutY="164.0" mnemonicParsing="false" onAction="#seleccionarSocio" text="Seleccionar">
+      <Button fx:id="btnSeleccionar" layoutX="141.0" layoutY="168.0" mnemonicParsing="false" onAction="#seleccionarSocio" text="Seleccionar">
          <font>
-            <Font name="Lucida Console" size="13.0" />
+            <Font name="Segoe UI" size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="buscarSocio" layoutX="18.0" layoutY="133.0" prefHeight="25.0" prefWidth="334.0" />
+      <TextField fx:id="buscarSocio" layoutX="18.0" layoutY="133.0" prefHeight="25.0" prefWidth="334.0">
+         <font>
+            <Font name="Segoe UI Bold" size="15.0" />
+         </font></TextField>
       <Label layoutX="18.0" layoutY="116.0" text="Buscar" />
    </children>
 </AnchorPane>

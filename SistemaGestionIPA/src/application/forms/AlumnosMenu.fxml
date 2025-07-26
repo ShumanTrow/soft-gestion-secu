@@ -14,16 +14,18 @@
          <font>
             <Font name="Lucida Console" size="13.0" />
          </font></Button>
-      <TableView fx:id="tablaAlumnos" layoutX="14.0" layoutY="178.0" prefHeight="492.0" prefWidth="946.0">
-        <columns>
-          <TableColumn fx:id="colID" prefWidth="84.0" text="ID de Alumno" />
-          <TableColumn fx:id="colNombre" prefWidth="172.0" text="Nombre Completo" />
-            <TableColumn fx:id="colDni" prefWidth="127.0" text="D.N.I." />
-            <TableColumn fx:id="colTelefono" prefWidth="123.0" text="Teléfono" />
-            <TableColumn fx:id="colDireccion" prefWidth="196.0" text="Dirección" />
-            <TableColumn fx:id="colSocioAsociado" prefWidth="171.0" text="Socio" />
-        </columns>
-      </TableView>
+      	<TableView fx:id="tablaAlumnos" layoutX="14.0" layoutY="178.0" prefHeight="492.0" prefWidth="946.0" style="-fx-font-size: 14px; -fx-font-family: 'Segoe UI';">
+  			<columns>
+			    <TableColumn fx:id="colID" prefWidth="84.0" style="-fx-alignment: CENTER;" text="ID de Alumno" />
+			    <TableColumn fx:id="colNombre" prefWidth="172.0" style="-fx-alignment: CENTER;" text="Nombre Completo" />
+			    <TableColumn fx:id="colDni" prefWidth="127.0" style="-fx-alignment: CENTER;" text="D.N.I." />
+			    <TableColumn fx:id="colTelefono" prefWidth="123.0" style="-fx-alignment: CENTER;" text="Teléfono" />
+			    <TableColumn fx:id="colDireccion" prefWidth="196.0" style="-fx-alignment: CENTER;" text="Dirección" />
+			    <TableColumn fx:id="colSocioAsociado" prefWidth="171.0" style="-fx-alignment: CENTER;" text="Socio" />
+  			</columns>
+		</TableView>
+
+
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="SALMON" height="108.0" stroke="BLACK" strokeType="INSIDE" width="974.0" />
       <Label layoutX="14.0" layoutY="32.0" text="Menú de Alumnos">
          <font>

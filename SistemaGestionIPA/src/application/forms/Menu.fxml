@@ -6,25 +6,20 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="628.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="511.0" style="-fx-background-color: lightcoral;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MenuController">
    <children>
-      <Button fx:id="btnAlumnos" layoutX="227.0" layoutY="301.0" mnemonicParsing="false" onAction="#abrirAlumnosMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Alumnos" textAlignment="CENTER">
+      <Button fx:id="btnAlumnos" layoutX="172.0" layoutY="341.0" mnemonicParsing="false" onAction="#abrirAlumnosMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Alumnos" textAlignment="CENTER">
          <font>
             <Font name="Courier New Bold" size="31.0" />
          </font>
       </Button>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="INDIANRED" height="123.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="628.0" />
-      <Button fx:id="btnSocios" layoutX="236.0" layoutY="143.0" mnemonicParsing="false" onAction="#abrirSociosMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Socios" textAlignment="CENTER">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="INDIANRED" height="123.0" layoutY="-1.0" stroke="BLACK" strokeType="INSIDE" width="511.0" />
+      <Button fx:id="btnSocios" layoutX="181.0" layoutY="150.0" mnemonicParsing="false" onAction="#abrirSociosMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Socios" textAlignment="CENTER">
          <font>
             <Font name="Courier New Bold" size="31.0" />
          </font>
       </Button>
-      <Button fx:id="btnCuotas" layoutX="236.0" layoutY="220.0" mnemonicParsing="false" onAction="#abrirCuotasMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Cuotas" textAlignment="CENTER">
-         <font>
-            <Font name="Courier New Bold" size="31.0" />
-         </font>
-      </Button>
-      <Button fx:id="btnUsuarios" layoutX="218.0" layoutY="381.0" mnemonicParsing="false" style="-fx-background-color: salmon; -fx-border-color: black;" text="Usuarios" textAlignment="CENTER">
+      <Button fx:id="btnCuotas" layoutX="181.0" layoutY="247.0" mnemonicParsing="false" onAction="#abrirCuotasMenu" style="-fx-background-color: salmon; -fx-border-color: black;" text="Cuotas" textAlignment="CENTER">
          <font>
             <Font name="Courier New Bold" size="31.0" />
          </font>
